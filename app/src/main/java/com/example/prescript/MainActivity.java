@@ -7,9 +7,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static Map<String, String> initializeLogins() {
+        Map<String, String> lg = new HashMap<>();
+
+        // place logins, as pairs of usernames and passwords, below
+        lg.put("admin@gmail.com", "admin@gmail.com");
+
+        return lg;
+    }
+
+    private static Map<String, String> logins = initializeLogins();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(username.getText().toString().equals("admin@gmail.com") && password.getText().toString().equals("admin@gmail.com")) {
+                if(logins.containsKey(username.getText().toString())
+                        && logins.get(username.getText().toString()).equals(password.getText().toString())) {
                     Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
                 }else
                     Toast.makeText(MainActivity.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
