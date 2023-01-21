@@ -2,6 +2,7 @@ package com.example.prescript;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -40,9 +41,15 @@ public class MainActivity extends AppCompatActivity {
                 if(logins.containsKey(username.getText().toString())
                         && logins.get(username.getText().toString()).equals(password.getText().toString())) {
                     Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
+                    openUI();
                 }else
                     Toast.makeText(MainActivity.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
             }
         });
     }
+    public void openUI(){
+        Intent intent = new Intent(this, userInterface.class);
+        startActivity(intent);
+    }
+
 }
