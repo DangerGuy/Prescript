@@ -53,7 +53,7 @@ public class UserInterface extends AppCompatActivity {
             ClickableSpan clickableMed = new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View view) {
-                    Toast.makeText(UserInterface.this, "2", Toast.LENGTH_SHORT);
+                    Toast.makeText(UserInterface.this, "2", Toast.LENGTH_SHORT).show();
                 }
             };
 
