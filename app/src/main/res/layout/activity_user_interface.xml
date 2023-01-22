@@ -34,8 +34,8 @@
         android:id="@+id/med0pic"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:visibility="visible"
         app:layout_constraintLeft_toRightOf="@+id/med0"
-        app:layout_constraintStart_to_StartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/med0"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -53,8 +53,8 @@
         android:id="@+id/med1pic"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:visibility="visible"
         app:layout_constraintLeft_toRightOf="@+id/med1"
-        app:layout_constraintStart_to_StartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/med1"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -72,8 +72,8 @@
         android:id="@+id/med2pic"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        app:layout_constraintLeft_toRightOf="@+id/med2   "
-        app:layout_constraintStart_to_StartOf="parent"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/med2"
         app:layout_constraintTop_toTopOf="@+id/med2"
         tools:srcCompat="@tools:sample/avatars" />
 
