@@ -42,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        public static String getDisplayName(Set<User> users, String username) {
+            for (User u : users) {
+                if (u.username.equals(username)) {
+                    return u.displayName;
+                }
+            }
+            throw new RuntimeException();
+        }
+
     }
 
     private static Set<User> initializeLogins() {
@@ -71,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(User.userHasPassword(users, username.getText().toString(), password.getText().toString())) {
                     Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
-                    openUI("abc");
+                    openUI(User.getDisplayName(users, username.getText().toString()));
                 }else
                     Toast.makeText(MainActivity.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
             }
