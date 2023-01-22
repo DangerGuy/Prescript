@@ -13,12 +13,14 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int UPPER_LIMIT_OF_MEDS_PER_PERSON = 3;
+    public static final int UPPER_LIMIT_OF_MEDS_PER_PERSON = 3;
     public static final String DISPLAY_NAME = "com.example.prescript.example.DISPLAY_NAME";
     public static final List<String> MEDICATION_NAMES
             = getConstants("com.example.prescript.example.MEDICATION_NAMES", UPPER_LIMIT_OF_MEDS_PER_PERSON);
     public static final List<String> MEDICATION_TIMES
             = getConstants("com.example.prescript.example.MEDICATION_TIMES", UPPER_LIMIT_OF_MEDS_PER_PERSON);
+    public static final List<String> MEDICATION_IS_P
+            = getConstants("com.exmaple.prescript.example.MEDICATION_IS_P", UPPER_LIMIT_OF_MEDS_PER_PERSON);
     public static final String MEDICATION_COUNT = "com.example.prescript.example.MEDICATION_COUNT";
 
     private static List<String> getConstants(String constant, int num) {
@@ -31,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static class Medication {
         String name, time;
-        public Medication(String n, String t) {
+        boolean isPrescription;
+        public Medication(String n, String t, boolean isP) {
             name = n;
             time = t;
+            isPrescription = isP;
         }
     }
 
@@ -91,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
         Set<User> users = new HashSet<>();
 
         users.add(new User("a", "a", "Admin", new ArrayList<>(Arrays.asList(
-                new Medication("Hydrophil", "9:00 a.m. daily"),
-                new Medication("Polybene", "12:00 p.m. once every 2 days")
+                new Medication("Hydrophil", "9:00 a.m. daily", true),
+                new Medication("Polybene", "12:00 p.m. once every 2 days", false)
         ))));
 
         users.add(new User("b", "b", "Bob-rat", new ArrayList<>(Arrays.asList(
-                new Medication("Banetane", "once every week at 4:00 p.m."),
-                new Medication("Heptaforis", "every day at 9 a.m. and 9 p.m."),
-                new Medication("Lethlisen", "twice a day, at any time")
+                new Medication("Banetane", "once every week at 4:00 p.m.", false),
+                new Medication("Heptaforis", "every day at 9 a.m. and 9 p.m.", true),
+                new Medication("Lethlisen", "twice a day, at any time", false)
         ))));
 
         return users;
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         for (Medication med : meds) {
             intent.putExtra(MEDICATION_NAMES.get(i), med.name);
             intent.putExtra(MEDICATION_TIMES.get(i), med.time);
+            intent.putExtra(MEDICATION_IS_P.get(i), med.isPrescription);
             i++;
         }
         intent.putExtra(MEDICATION_COUNT, i);

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
-        android:text=""
+        android:text="display name"
         android:textSize="34sp"
         android:textStyle="bold"
         android:typeface="sans"
@@ -26,9 +26,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
-        android:text=""
+        android:text="med 0   "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/displayName" />
+
+    <ImageView
+        android:id="@+id/med0pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/med0"
+        app:layout_constraintStart_to_StartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/med0"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/med1"
@@ -36,9 +45,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
-        android:text=""
+        android:text="med 1   "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/med0" />
+
+    <ImageView
+        android:id="@+id/med1pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/med1"
+        app:layout_constraintStart_to_StartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/med1"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/med2"
@@ -46,8 +64,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
-        android:text=""
+        android:text="med 2   "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/med1" />
+
+    <ImageView
+        android:id="@+id/med2pic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/med2   "
+        app:layout_constraintStart_to_StartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/med2"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

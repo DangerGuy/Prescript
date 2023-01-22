@@ -36,11 +36,18 @@ public class userInterface extends AppCompatActivity {
         List<TextView> medications = new ArrayList<>();
 
         int medCount = intent.getIntExtra(MainActivity.MEDICATION_COUNT, 0);
-        for (int i = 0; i < medCount; i++) {
+        int i;
+        for (i = 0; i < medCount; i++) {
             String medName = intent.getStringExtra(MainActivity.MEDICATION_NAMES.get(i));
             String medTime = intent.getStringExtra(MainActivity.MEDICATION_TIMES.get(i));
             medications.add((TextView) findViewById(selectMed(i)));
-            String setTo = medName + " (" + medTime + ")";
+            String setTo = medName + " (" + medTime + ")   ";
+            medications.get(i).setText(setTo);
+        }
+
+        for (; i < MainActivity.UPPER_LIMIT_OF_MEDS_PER_PERSON; i++) {
+            medications.add((TextView) findViewById(selectMed(i)));
+            String setTo = "";
             medications.get(i).setText(setTo);
         }
 
