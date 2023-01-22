@@ -21,16 +21,16 @@ public class userInterface extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.displayName);
         textView.setText(text);
 
-        List<TextView> medications = new ArrayList<>();
-
-        int medCount = intent.getIntExtra(MainActivity.MEDICATION_COUNT, 0);
-        for (int i = 0; i < medCount; i++) {
-            String medName = intent.getStringExtra(MainActivity.MEDICATION_NAMES.get(i));
-            String medTime = intent.getStringExtra(MainActivity.MEDICATION_TIMES.get(i));
-            medications.add((TextView) findViewById(R.id.med0 - i));
-            String setTo = medName + " (" + medTime + ")";
-            medications.get(i).setText(setTo);
-        }
+//        List<TextView> medications = new ArrayList<>();
+//
+//        int medCount = intent.getIntExtra(MainActivity.MEDICATION_COUNT, 0);
+//        for (int i = 0; i < medCount; i++) {
+//            String medName = intent.getStringExtra(MainActivity.MEDICATION_NAMES.get(i));
+//            String medTime = intent.getStringExtra(MainActivity.MEDICATION_TIMES.get(i));
+//            medications.add((TextView) findViewById(R.id.med0 - i));
+//            String setTo = medName + " (" + medTime + ")";
+//            medications.get(i).setText(setTo);
+//        }
 
     }
 }
