@@ -181,15 +181,20 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            users.add(new User("a", "a", "Admin", new ArrayList<>(Arrays.asList(
-                    MED_DATABASE.findMedication("Hydrophil"),
-                    MED_DATABASE.findMedication("Polybene")
+            users.add(new User("andy@gmail.com", "andy", "Andy", new ArrayList<>(Arrays.asList(
+                    MED_DATABASE.findMedication("Vitamin C"),
+                    MED_DATABASE.findMedication("Pill")
             ))));
 
-            users.add(new User("b", "b", "Bob-rat", new ArrayList<>(Arrays.asList(
-                    MED_DATABASE.findMedication("Polybene"),
-                    MED_DATABASE.findMedication("Heptaforis"),
-                    MED_DATABASE.findMedication("Lethlisen")
+            users.add(new User("bob@gmail.com", "bob", "Bob", new ArrayList<>(Arrays.asList(
+                    MED_DATABASE.findMedication("Ventolin"),
+                    MED_DATABASE.findMedication("Valium")
+            ))));
+
+            users.add(new User("cathy@gmail.com", "cathy", "Cathy", new ArrayList<>(Arrays.asList(
+                    MED_DATABASE.findMedication("Creatine"),
+                    MED_DATABASE.findMedication("Alcohol"),
+                    MED_DATABASE.findMedication("Pill")
             ))));
 
         } catch (MedicationsDatabase.NoMedicationFoundException e) {
