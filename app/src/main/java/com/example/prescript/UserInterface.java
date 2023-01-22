@@ -1,15 +1,22 @@
 package com.example.prescript;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class userInterface extends AppCompatActivity {
+public class UserInterface extends AppCompatActivity {
 
     private static int selectMed(int i) {
         switch (i) {
@@ -41,8 +48,18 @@ public class userInterface extends AppCompatActivity {
             String medName = intent.getStringExtra(MainActivity.MEDICATION_NAMES.get(i));
             String medTime = intent.getStringExtra(MainActivity.MEDICATION_TIMES.get(i));
             medications.add((TextView) findViewById(selectMed(i)));
-            String setTo = medName + " (" + medTime + ")   ";
+            SpannableString setTo = new SpannableString(medName + " (" + medTime + ")   ");
+
+            ClickableSpan clickableMed = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    Toast.makeText(UserInterface.this, "2", Toast.LENGTH_SHORT);
+                }
+            };
+
+            setTo.setSpan(clickableMed, 0, setTo.length() - 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             medications.get(i).setText(setTo);
+            medications.get(i).setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         for (; i < MainActivity.UPPER_LIMIT_OF_MEDS_PER_PERSON; i++) {

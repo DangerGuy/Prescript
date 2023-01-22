@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void openUI(String name, List<Medication> meds){
-        Intent intent = new Intent(this, userInterface.class);
+        Intent intent = new Intent(this, UserInterface.class);
         intent.putExtra(DISPLAY_NAME, name);
         int i = 0;
         for (Medication med : meds) {

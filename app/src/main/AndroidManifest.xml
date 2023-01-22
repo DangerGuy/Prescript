@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Prescript"
         tools:targetApi="31">
         <activity
-            android:name=".userInterface"
+            android:name=".UserInterface"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
         <activity
