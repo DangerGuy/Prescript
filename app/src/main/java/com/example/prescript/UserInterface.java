@@ -10,6 +10,7 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class UserInterface extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.displayName);
         textView.setText(text);
 
+        TextView medAddMsg = (TextView) findViewById(R.id.medAddMsg);
+        medAddMsg.setText("");
+
         List<TextView> medications = new ArrayList<>();
 
         int medCount = intent.getIntExtra(MainActivity.MEDICATION_COUNT, 0);
@@ -81,6 +85,78 @@ public class UserInterface extends AppCompatActivity {
             String setTo = "";
             medications.get(i).setText(setTo);
         }
+
+        List<MainActivity.Medication> meds = MainActivity.constructFromDeconstructedMedicationInfo(
+                MainActivity.MEDICATION_NAMES, MainActivity.MEDICATION_DESC, MainActivity.MEDICATION_IS_P,
+                MainActivity.MEDICATION_TIMES, MainActivity.MEDICATION_CONFS, medCount, intent
+        );
+
+        String medToAdd = ((TextView) findViewById(R.id.typeMedBox)).getText().toString();
+        Button medAddBut = (Button) findViewById(R.id.addMedBut);
+
+        medAddBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*
+                1. not in database
+                2. already in meds
+                3. in database, not in meds, has conflict
+                4. in database, not in meds, no conflict
+                5. already 3 drugs
+                */
+                try {
+
+                    MainActivity.Medication addedMed = MainActivity.MED_DATABASE.findMedication(medToAdd);
+
+                    if (MainActivity.hasMedication(meds, medToAdd)) {
+                        // case 2
+                        medAddMsg.setText("You are already taking " + addedMed.name + ", so no need to add it again.");
+                        return;
+                    }
+
+                    if (MainActivity.hasConflicts(addedMed, meds)) {
+                        // case 3
+                        medAddMsg.setText("You cannot add " + addedMed.name
+                                + " because it has conflicting medication that you are already taking: "
+                                + MainActivity.getConflicts(addedMed, meds) + ".");
+                        return;
+                    }
+
+                    if (meds.size() == MainActivity.UPPER_LIMIT_OF_MEDS_PER_PERSON) {
+                        // case 5
+                        medAddMsg.setText("Oops, this prototype Prescript program does not support people taking more than " +
+                                MainActivity.UPPER_LIMIT_OF_MEDS_PER_PERSON + " medications.");
+                        return;
+                    }
+
+                    // case 4
+                    medAddMsg.setText("Success, " + addedMed.name + " has been added to the medications you are taking.");
+                    int index = meds.size();
+                    int medId = selectMed(index);
+                    medications.add((TextView) findViewById(medId));
+                    SpannableString setTo = new SpannableString(addedMed.name + " (" + addedMed.time + ")   ");
+
+                    ClickableSpan clickableMed = new ClickableSpan() {
+                        @Override
+                        public void onClick(@NonNull View view) {
+                            openMedDetails(addedMed.name, addedMed.description, addedMed.isPrescription);
+                        }
+                    };
+
+                    setTo.setSpan(clickableMed, 0, setTo.length() - 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    medications.get(index).setText(setTo);
+                    medications.get(index).setMovementMethod(LinkMovementMethod.getInstance());
+
+                    meds.add(addedMed);
+
+                } catch (MedicationsDatabase.NoMedicationFoundException e) {
+                    // case 1
+                    medAddMsg.setText("Sorry, but the medication " + medToAdd + " does not currently exist within our database.");
+                }
+
+            }
+
+        });
 
     }
 }

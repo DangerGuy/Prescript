@@ -13,6 +13,9 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    public static MedicationsDatabase MED_DATABASE = new MedicationsDatabase();
+
     public static final int UPPER_LIMIT_OF_MEDS_PER_PERSON = 3;
     public static final String DISPLAY_NAME = "com.example.prescript.example.DISPLAY_NAME";
     public static final List<String> MEDICATION_NAMES
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
             = getConstants("com.example.prescript.example.MEDICATION_IS_P", UPPER_LIMIT_OF_MEDS_PER_PERSON);
     public static final List<String> MEDICATION_DESC
             = getConstants("com.example.prescript.example.MEDICATION_DESC", UPPER_LIMIT_OF_MEDS_PER_PERSON);
+    public static final List<String> MEDICATION_CONFS
+            = getConstants("com.example.prescript.example.MEDICATION_CONFS", UPPER_LIMIT_OF_MEDS_PER_PERSON);
     public static final String MEDICATION_COUNT = "com.example.prescript.example.MEDICATION_COUNT";
 
     private static List<String> getConstants(String constant, int num) {
@@ -34,13 +39,90 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static class Medication {
+
         String name, time, description;
         boolean isPrescription;
-        public Medication(String n, String t, boolean isP, String desc) {
+
+        List<String> conflicts;
+        public Medication(String n, String t, boolean isP, String desc, List<String> confs) {
             name = n;
             time = t;
             isPrescription = isP;
             description = desc;
+            conflicts = confs;
+        }
+    }
+
+    // input: "Banetene,Polybene,Paloene"
+    // output: {"Banetene", "Polybene", "Paloene"}
+    private static List<String> parseConflictList(String rawConfList) {
+        return Arrays.asList(rawConfList.split(","));
+    }
+
+    public static List<Medication> constructFromDeconstructedMedicationInfo(
+            List<String> names, List<String> descs, List<String> isPs, List<String> times, List<String> conflictLists,
+            int medCount, Intent intent) {
+        List<Medication> meds = new ArrayList<>();
+        for (int i = 0;  i < medCount; i++) {
+            meds.add(new Medication(
+                    intent.getStringExtra(names.get(i)),
+                    intent.getStringExtra(times.get(i)),
+                    intent.getBooleanExtra(isPs.get(i), false),
+                    intent.getStringExtra(descs.get(i)),
+                    parseConflictList(intent.getStringExtra(descs.get(i)))
+            ));
+        }
+        return meds;
+    }
+
+    public static Medication getMedication(Collection<Medication> meds, String getName)
+            throws MedicationsDatabase.NoMedicationFoundException {
+        for (Medication med : meds) {
+            if (med.name.equalsIgnoreCase(getName)) {
+                return med;
+            }
+        }
+        throw new MedicationsDatabase.NoMedicationFoundException();
+    }
+
+    public static boolean hasMedication(Collection<Medication> meds, String getName) {
+        try {
+            getMedication(meds, getName);
+            return true;
+        } catch (MedicationsDatabase.NoMedicationFoundException e) {
+            return false;
+        }
+    }
+
+    public static boolean containsIgnoreCase(Collection<String> strings, String searchValue) {
+        for (String s : strings) {
+            if (s.equalsIgnoreCase(searchValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasConflicts(Medication newMed, Collection<Medication> existingMeds) {
+        for (Medication existingMed : existingMeds) {
+            if (containsIgnoreCase(newMed.conflicts, existingMed.name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String getConflicts(Medication newMed, Collection<Medication> existingMeds) {
+        String conflicts = "";
+        for (Medication existingMed : existingMeds) {
+            if (containsIgnoreCase(newMed.conflicts, existingMed.name)) {
+                conflicts += ", " + existingMed.name;
+            }
+        }
+        if (conflicts.isEmpty()) {
+            return conflicts;
+        } else {
+            return conflicts.substring(2);
         }
     }
 
@@ -83,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException();
         }
 
-        public static List<Medication> getMedication(Set<User> users, String username) {
+        public static List<Medication> getMedicationForUser(Set<User> users, String username) {
             for (User u : users) {
                 if (u.username.equals(username)) {
                     return u.meds;
@@ -97,21 +179,22 @@ public class MainActivity extends AppCompatActivity {
     private static Set<User> initializeLogins() {
         Set<User> users = new HashSet<>();
 
-        users.add(new User("a", "a", "Admin", new ArrayList<>(Arrays.asList(
-                new Medication("Hydrophil", "9:00 a.m. daily", true,
-                        "a truly competent drug that will make you fly"),
-                new Medication("Polybene", "12:00 p.m. once every 2 days", false,
-                        "a medicine that makes you grow 4 legs")
-        ))));
+        try {
 
-        users.add(new User("b", "b", "Bob-rat", new ArrayList<>(Arrays.asList(
-                new Medication("Banetane", "once every week at 4:00 p.m.", false,
-                        "this medication makes you invincible!"),
-                new Medication("Heptaforis", "every day at 9 a.m. and 9 p.m.", true,
-                        "makes you live forever"),
-                new Medication("Lethlisen", "twice a day, at any time", false,
-                        "makes you invisible")
-        ))));
+            users.add(new User("a", "a", "Admin", new ArrayList<>(Arrays.asList(
+                    MED_DATABASE.findMedication("Hydrophil"),
+                    MED_DATABASE.findMedication("Polybene")
+            ))));
+
+            users.add(new User("b", "b", "Bob-rat", new ArrayList<>(Arrays.asList(
+                    MED_DATABASE.findMedication("Polybene"),
+                    MED_DATABASE.findMedication("Heptaforis"),
+                    MED_DATABASE.findMedication("Lethlisen")
+            ))));
+
+        } catch (MedicationsDatabase.NoMedicationFoundException e) {
+            throw new RuntimeException();
+        }
 
         return users;
     }
@@ -134,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 if(User.userHasPassword(users, username.getText().toString(), password.getText().toString())) {
                     Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
                     openUI(User.getDisplayName(users, username.getText().toString()),
-                           User.getMedication(users, username.getText().toString()));
+                           User.getMedicationForUser(users, username.getText().toString()));
                 }else
                     Toast.makeText(MainActivity.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
             }
@@ -149,6 +232,11 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(MEDICATION_TIMES.get(i), med.time);
             intent.putExtra(MEDICATION_IS_P.get(i), med.isPrescription);
             intent.putExtra(MEDICATION_DESC.get(i), med.description);
+            String allConfsTogether = med.conflicts.isEmpty() ? "" : med.conflicts.get(0);
+            for (int ii = 1; ii < med.conflicts.size(); ii++) {
+                allConfsTogether += "," + med.conflicts.get(ii);
+            }
+            intent.putExtra(MEDICATION_CONFS.get(i), allConfsTogether);
             i++;
         }
         intent.putExtra(MEDICATION_COUNT, i);
