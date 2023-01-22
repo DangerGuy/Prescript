@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Set<User> users = new HashSet<>();
 
         // place logins, as pairs of usernames and passwords, below
-        users.add(new User("admin@gmail.com", "admin@gmail.com", "Admin"));
+        users.add(new User("a", "a", "Admin"));
 
 
         return users;
