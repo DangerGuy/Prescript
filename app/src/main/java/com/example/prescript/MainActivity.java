@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
+
     public static final String EXTRA_TEXT = "com.example.prescript.example.EXTRA_TEXT";
 
     private static class User {
@@ -48,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         // place logins, as pairs of usernames and passwords, below
         users.add(new User("admin@gmail.com", "admin@gmail.com", "Admin"));
-
-
+    
         return users;
     }
 
@@ -65,20 +65,21 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn = (Button) findViewById(R.id.button);
 
+        //
+
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if(User.userHasPassword(users, username.getText().toString(), password.getText().toString())) {
                     Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
-                    openUI("abc");
+                    openUI();
                 }else
                     Toast.makeText(MainActivity.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    public void openUI(String name){
+    public void openUI(){
         Intent intent = new Intent(this, userInterface.class);
-        intent.putExtra(EXTRA_TEXT, name);
         startActivity(intent);
     }
 
