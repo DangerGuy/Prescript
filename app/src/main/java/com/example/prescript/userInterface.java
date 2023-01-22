@@ -18,7 +18,7 @@ public class userInterface extends AppCompatActivity {
 
         Intent intent = getIntent();
         String text = intent.getStringExtra(MainActivity.DISPLAY_NAME);
-        TextView textView = (TextView) findViewById(R.id.textView);
+        TextView textView = (TextView) findViewById(R.id.displayName);
         textView.setText(text);
 
         List<TextView> medications = new ArrayList<>();
@@ -27,7 +27,7 @@ public class userInterface extends AppCompatActivity {
         for (int i = 0; i < medCount; i++) {
             String medName = intent.getStringExtra(MainActivity.MEDICATION_NAMES.get(i));
             String medTime = intent.getStringExtra(MainActivity.MEDICATION_TIMES.get(i));
-            medications.add((TextView) findViewById(R.id.textView));
+            medications.add((TextView) findViewById(R.id.med0 - i));
             String setTo = medName + " (" + medTime + ")";
             medications.get(i).setText(setTo);
         }

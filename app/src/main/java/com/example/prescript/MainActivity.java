@@ -13,7 +13,7 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int UPPER_LIMIT_OF_MEDS_PER_PERSON = 1000;
+    private static final int UPPER_LIMIT_OF_MEDS_PER_PERSON = 3;
     public static final String DISPLAY_NAME = "com.example.prescript.example.DISPLAY_NAME";
     public static final List<String> MEDICATION_NAMES
             = getConstants("com.example.prescript.example.MEDICATION_NAMES", UPPER_LIMIT_OF_MEDS_PER_PERSON);
