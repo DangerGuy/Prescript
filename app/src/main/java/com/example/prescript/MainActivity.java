@@ -12,16 +12,46 @@ import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static Map<String, String> initializeLogins() {
-        Map<String, String> lg = new HashMap<>();
+    private static class User {
 
-        // place logins, as pairs of usernames and passwords, below
-        lg.put("admin@gmail.com", "admin@gmail.com");
+        public String username, password, displayName;
 
-        return lg;
+        public User(String u, String p, String d) {
+            username = u;
+            password = p;
+            displayName = d;
+        }
+
+        public static boolean containsUsername(Set<User> users, String username) {
+            for (User u : users) {
+                if (u.username.equals(username)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static boolean userHasPassword(Set<User> users, String username, String password) {
+            for (User u : users) {
+                if (u.username.equals(username) && u.password.equals(password)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 
-    private static Map<String, String> logins = initializeLogins();
+    private static Set<User> initializeLogins() {
+        Set<User> users = new HashSet<>();
+
+        // place logins, as pairs of usernames and passwords, below
+        users.add(new User("Admin", "admin@gmail.com", "admin@gmail.com"));
+
+        return users;
+    }
+
+    private static final Set<User> users = initializeLogins();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(logins.containsKey(username.getText().toString())
-                        && logins.get(username.getText().toString()).equals(password.getText().toString())) {
+                if(User.userHasPassword(users, username.getText().toString(), password.getText().toString())) {
                     Toast.makeText(MainActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
                     openUI();
                 }else
