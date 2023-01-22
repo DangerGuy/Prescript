@@ -91,12 +91,13 @@ public class UserInterface extends AppCompatActivity {
                 MainActivity.MEDICATION_TIMES, MainActivity.MEDICATION_CONFS, medCount, intent
         );
 
-        String medToAdd = ((TextView) findViewById(R.id.typeMedBox)).getText().toString();
+        TextView medToAddTV = (TextView) findViewById(R.id.typeMedBox);
         Button medAddBut = (Button) findViewById(R.id.addMedBut);
 
         medAddBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 /*
                 1. not in database
                 2. already in meds
@@ -104,6 +105,9 @@ public class UserInterface extends AppCompatActivity {
                 4. in database, not in meds, no conflict
                 5. already 3 drugs
                 */
+
+                String medToAdd = medToAddTV.getText().toString();
+
                 try {
 
                     MainActivity.Medication addedMed = MainActivity.MED_DATABASE.findMedication(medToAdd);
