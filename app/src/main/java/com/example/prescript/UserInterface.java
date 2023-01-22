@@ -18,6 +18,10 @@ import java.util.List;
 
 public class UserInterface extends AppCompatActivity {
 
+    public static final String MEDICATION_NAME = "com.example.userInterface.example.MEDICATION_NAME";
+    public static final String MEDICATION_IS_P = "com.example.userInterface.example.MEDICATION_IS_P";
+    public static final String MEDICATION_DESC = "com.example.userInterface.example.MEDICATION_DESC";
+
     private static int selectMed(int i) {
         switch (i) {
             case 0:
@@ -28,6 +32,14 @@ public class UserInterface extends AppCompatActivity {
                 return R.id.med2;
         }
         throw new RuntimeException();
+    }
+
+    public void openMedDetails(String medName, String medDesc, boolean medIsP) {
+        Intent intent = new Intent(this, MedDetails.class);
+        intent.putExtra(MEDICATION_NAME, medName);
+        intent.putExtra(MEDICATION_DESC, medDesc);
+        intent.putExtra(MEDICATION_IS_P, medIsP);
+        startActivity(intent);
     }
 
     @Override
@@ -47,13 +59,15 @@ public class UserInterface extends AppCompatActivity {
         for (i = 0; i < medCount; i++) {
             String medName = intent.getStringExtra(MainActivity.MEDICATION_NAMES.get(i));
             String medTime = intent.getStringExtra(MainActivity.MEDICATION_TIMES.get(i));
+            String medDesc = intent.getStringExtra(MainActivity.MEDICATION_DESC.get(i));
+            boolean medIsP = intent.getBooleanExtra(MainActivity.MEDICATION_IS_P.get(i), false);
             medications.add((TextView) findViewById(selectMed(i)));
             SpannableString setTo = new SpannableString(medName + " (" + medTime + ")   ");
 
             ClickableSpan clickableMed = new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View view) {
-                    Toast.makeText(UserInterface.this, "2", Toast.LENGTH_SHORT).show();
+                    openMedDetails(medName, medDesc, medIsP);
                 }
             };
 
